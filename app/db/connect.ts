@@ -1,10 +1,22 @@
+
 import sql from 'mssql';
 
+const {
+  DB_USER,
+  DB_PASSWORD,
+  DB_SERVER,
+  DB_DATABASE
+} = process.env;
+
+if (!DB_USER || !DB_PASSWORD || !DB_SERVER || !DB_DATABASE) {
+  throw new Error('One or more required DB environment variables are missing');
+}
+
 const config = {
-  user: 'msu',
-  password: '160378',
-  server: 'progerx.svr.vc',
-  database: 'newstud',
+  user: DB_USER,
+  password: DB_PASSWORD,
+  server: DB_SERVER,
+  database: DB_DATABASE,
   options: {
     encrypt: true, // если требуется для вашего сервера
     trustServerCertificate: true // если используется self-signed сертификат
