@@ -11,7 +11,6 @@ export default async function getLoads(
     try {
         await connectToDb();
         const result = await sql.query(`
-            --EXEC GetPlanTermLoads 
             EXEC am_GetSubjLoads2 ${faculty_id}, ${plan_id}, ${semester}
         `);
         data = result.recordset;

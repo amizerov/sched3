@@ -37,19 +37,21 @@ export default function Page() {
         setLoading(true);
         
         // Получаем данные через API routes
-        const [loadsResponse, semestersResponse, facultiesResponse, plansResponse] = await Promise.all([
-          fetch(`/api/loads?facultyId=${facultyId}&planId=${planId}&semester=${semester}`),
-          planId ? fetch(`/api/semesters?facultyId=${facultyId}&planId=${planId}`) : Promise.resolve(null),
+        const [loadsResponse, facultiesResponse, plansResponse] = await Promise.all([
+          fetch(`/api/loads?facultyId=${facultyId}&planId=${planId}&semester=0`), // semester=0 для всех семестров
           fetch('/api/faculties'),
           fetch(`/api/plans?facultyId=${facultyId}`)
         ]);
 
-        const [loadsResult, semestersResult, facultiesResult, plansResult] = await Promise.all([
+        const [loadsResult, facultiesResult, plansResult] = await Promise.all([
           loadsResponse.json(),
-          semestersResponse ? semestersResponse.json() : { semesters: [], error: null },
           facultiesResponse.json(),
           plansResponse.json()
         ]);
+
+        // Импортируем getAvailableSemesters динамически
+        const { default: getAvailableSemesters } = await import('../db/getAvailableSemesters');
+        const semestersResult = getAvailableSemesters(loadsResult.data);
 
         if (loadsResult.error || semestersResult.error || facultiesResult.error || plansResult.error) {
           setError(loadsResult.error || semestersResult.error || facultiesResult.error || plansResult.error);
@@ -69,9 +71,16 @@ export default function Page() {
     loadData();
   }, [facultyId, planId, semester, sessionData]); // Добавляем sessionData в зависимости
 
+
+  // Фильтруем данные по выбранному семестру, если он не 0
+  const filteredData = semester === 0
+    ? data
+    : data.filter(row => row.Semester === semester);
+
   // Получаем название факультета и учебного плана из первого элемента, если есть
-  const facultyName = data.length > 0 && data[0].Faculty_Name ? data[0].Faculty_Name : '';
-  const planName = data.length > 0 && data[0].Plan_Name ? data[0].Plan_Name : '';
+  const facultyName = filteredData.length > 0 && filteredData[0].Faculty_Name ? filteredData[0].Faculty_Name : '';
+  const planName = filteredData.length > 0 && filteredData[0].Plan_Name ? filteredData[0].Plan_Name : '';
+
 
   if (loading) {
     return (
@@ -116,7 +125,7 @@ export default function Page() {
       {/* Таблица */}
       {planId && (
         <SubjectTable 
-          data={data}
+          data={filteredData}
           facultyId={facultyId}
           faculty={facultyName}
           planId={planId}
