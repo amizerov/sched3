@@ -140,7 +140,7 @@ export default function JustTable(
                     className={`${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'} border-b border-gray-200 hover:bg-blue-50 cursor-pointer transition-colors`}
                     onClick={() => {
                       // Отладочная информация
-                      console.log('Row data:', row);
+                      //console.log('Row data:', row);
                       
                       // Сохраняем данные о выбранном предмете в сессии
                       updateSessionData({
