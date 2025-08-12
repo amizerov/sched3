@@ -4,7 +4,7 @@ import { connectToDb } from "./connect";
 export interface Faculty {
     Faculty_ID: number;
     Faculty_Name: string;
-    Short_Name: string;
+    God: number;
     Plans: number;
 }
 
@@ -19,6 +19,7 @@ export default async function getFaculties(): Promise<{ faculties: Faculty[]; er
                 f.Nfirm        AS Faculty_ID,   -- идентификатор факультета
                 f.Firm_Name    AS Faculty_Name, -- полное название
                 f.Short_Name   AS Short_Name,
+				max(god) God,
                 count(*) AS Plans
             FROM dbo.Educ_Plan AS p
             JOIN dbo.Firm      AS f ON p.Nfirm = f.Nfirm

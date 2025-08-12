@@ -157,10 +157,10 @@ export default function FacultyModal({
                   Название
                 </th>
                 <th className="w-24 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Short
+                  Год
                 </th>
                 <th className="w-16 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Plans
+                  Планы
                 </th>
               </tr>
             </thead>
@@ -181,8 +181,8 @@ export default function FacultyModal({
                   <td className="w-2/3 px-4 py-4 text-sm text-gray-900 truncate" title={faculty.Faculty_Name}>
                     {faculty.Faculty_Name}
                   </td>
-                  <td className="w-24 px-4 py-4 text-sm text-gray-500 truncate" title={faculty.Short_Name || '-'}>
-                    {faculty.Short_Name || '-'}
+                  <td className="w-24 px-4 py-4 text-sm text-gray-500 truncate">
+                    {faculty.God || '-'}
                   </td>
                   <td className="w-16 px-4 py-4 text-sm text-gray-500 truncate">
                     {faculty.Plans}
